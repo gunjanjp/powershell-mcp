@@ -1,12 +1,18 @@
 {
-  "name": "powershell-mcp",
-  "version": "1.0.0",
-  "description": "A Model Context Protocol (MCP) server that enables Claude and other LLM applications to execute PowerShell commands and scripts on Windows systems.",
-  "main": "server.js",
+  "name": "powershell-mcp-server",
+  "version": "1.1.0",
+  "description": "A comprehensive Model Context Protocol (MCP) server that enables Claude and other LLM applications to execute PowerShell commands, scripts, and system operations on Windows systems.",
+  "main": "src/server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server.js",
+    "setup": "node scripts/setup.js",
+    "fix": "node scripts/auto-fix.js",
+    "test": "npm run setup validate",
+    "diagnose": "npm run setup diagnose",
+    "install-server": "npm run setup install",
+    "uninstall-server": "npm run setup uninstall",
+    "check-health": "node -e \"import('./src/utils/system-utils.js').then(m => m.checkPowerShellHealth().then(r => console.log(JSON.stringify(r, null, 2))))\""
   },
   "keywords": [
     "mcp",
@@ -16,7 +22,13 @@
     "ai",
     "llm",
     "windows",
-    "automation"
+    "automation",
+    "system-administration",
+    "scripts",
+    "cli",
+    "windows-management",
+    "devops",
+    "system-monitoring"
   ],
   "author": "Gunjan",
   "license": "MIT",
@@ -28,8 +40,25 @@
     "url": "https://github.com/gunjanjp/powershell-mcp/issues"
   },
   "homepage": "https://github.com/gunjanjp/powershell-mcp#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",
-    "node-powershell": "^5.0.1"
-  }
+    "node-powershell": "^5.0.1",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {},
+  "files": [
+    "src/",
+    "scripts/",
+    "examples/",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "preferGlobal": false,
+  "os": [
+    "win32"
+  ]
 }

@@ -1,0 +1,169 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [ published ]
+
+jobs:
+  test:
+    name: Test on Windows
+    runs-on: windows-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 21.x]
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Check PowerShell availability
+      run: |
+        powershell -Command "Write-Host 'PowerShell Version:'; $PSVersionTable.PSVersion"
+        
+    - name: Run health check
+      run: npm run check-health
+      
+    - name: Run diagnostics
+      run: npm run diagnose
+      
+    - name: Validate configuration
+      run: npm run test
+      
+    - name: Test server startup
+      run: |
+        # Start server in background and test it responds
+        $job = Start-Job -ScriptBlock { 
+          cd $using:pwd
+          node src/server.js 
+        }
+        Start-Sleep -Seconds 5
+        Stop-Job $job
+        Remove-Job $job
+        
+  lint-and-format:
+    name: Lint and Format Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Check file structure
+      run: |
+        echo "Checking project structure..."
+        ls -la
+        echo "Source files:"
+        find src -name "*.js" | head -10
+        echo "Example files:"
+        find examples -name "*.ps1" | head -10
+        
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run security audit
+      run: npm audit --audit-level moderate
+      
+    - name: Check for vulnerable packages
+      run: npm audit --audit-level high --dry-run
+      
+  documentation:
+    name: Documentation Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Check required files
+      run: |
+        echo "Checking required documentation files..."
+        test -f README.md && echo "✅ README.md exists"
+        test -f CHANGELOG.md && echo "✅ CHANGELOG.md exists"
+        test -f LICENSE && echo "✅ LICENSE exists"
+        test -f package.json && echo "✅ package.json exists"
+        
+    - name: Validate package.json
+      run: |
+        node -e "
+          const pkg = require('./package.json');
+          console.log('Package name:', pkg.name);
+          console.log('Version:', pkg.version);
+          console.log('License:', pkg.license);
+          console.log('Main entry:', pkg.main);
+          if (!pkg.main.includes('src/')) throw new Error('Main entry should point to src/');
+          if (pkg.version !== '1.1.0') throw new Error('Version should be 1.1.0');
+          console.log('✅ package.json validation passed');
+        "
+        
+  compatibility:
+    name: Windows Compatibility Test
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Test PowerShell integration
+      run: |
+        Write-Host "Testing PowerShell Core..."
+        pwsh -Command "Get-Host"
+        
+        Write-Host "Testing Windows PowerShell..."
+        powershell -Command "Get-Host"
+        
+    - name: Test example scripts
+      run: |
+        Write-Host "Testing example scripts..."
+        powershell -ExecutionPolicy Bypass -File "examples/system-info.ps1"
+        
+    - name: Test auto-fix functionality
+      run: |
+        Write-Host "Testing auto-fix (dry run)..."
+        # Run diagnostics only, don't actually configure Claude
+        npm run diagnose

@@ -1,224 +1,372 @@
 # PowerShell MCP Server
 
-A Model Context Protocol (MCP) server that enables Claude and other LLM applications to execute PowerShell commands and scripts on Windows systems.
+A comprehensive Model Context Protocol (MCP) server that enables Claude and other LLM applications to execute PowerShell commands, scripts, and perform advanced system operations on Windows systems.
 
-## 🚀 Features
+## 🌟 **Key Features**
 
-- Execute PowerShell commands directly from Claude
-- Support for both PowerShell Core (pwsh) and Windows PowerShell
-- Secure execution with configurable execution policies
-- Real-time command output and error handling
-- Cross-compatible with MCP-enabled applications
+- **🔧 Multiple PowerShell Tools**: Execute commands, scripts, and system operations
+- **🖥️ System Monitoring**: Comprehensive system information, process monitoring, and performance metrics
+- **📁 File Operations**: Advanced file system operations, searching, and management
+- **⚙️ Auto-Configuration**: One-command setup with Claude Desktop integration
+- **🛡️ Security**: Safe execution with configurable policies and input validation
+- **📊 Rich Output**: Formatted JSON responses with timestamps and detailed information
+- **🔍 Diagnostics**: Built-in health checks and troubleshooting tools
 
-## 📋 Prerequisites
+## 🛠️ **Available Tools**
 
-- **Node.js** (version 14 or higher)
-- **Windows** operating system
-- **PowerShell** (Windows PowerShell 5.1+ or PowerShell Core 7+)
+### PowerShell Execution
+- `execute-powershell` - Execute PowerShell commands with optional working directory
+- `execute-powershell-script` - Run PowerShell script files with parameters
+- `create-powershell-script` - Create new PowerShell scripts with specified content
+
+### System Information
+- `get-system-info` - Comprehensive Windows system information and hardware details
+- `get-process-list` - Running processes with CPU and memory usage, sortable and filterable
+- `get-service-status` - Windows services status with filtering options
+- `check-disk-space` - Disk space usage for all drives or specific drives
+
+### File System Operations
+- `list-directory` - Enhanced directory listing with filtering and detailed information
+- `get-file-info` - Detailed file and directory metadata
+- `search-files` - Recursive file search with pattern matching
+
+## 📋 **Prerequisites**
+
+- **Windows** 10/11 or Windows Server 2016+
+- **Node.js** 18.0.0 or higher
+- **PowerShell** 5.1+ (Windows PowerShell) or PowerShell Core 7+
 - **Claude Desktop** or other MCP-compatible application
 
-## 🛠️ Installation
+## 🚀 **Quick Start**
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/gunjanjp/powershell-mcp.git
-   cd powershell-mcp
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Verify PowerShell is available:**
-   ```bash
-   powershell -Command "Get-Host"
-   ```
-
-## ⚙️ Configuration
-
-### For Claude Desktop
-
-1. **Locate your Claude configuration file:**
-   - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
-
-2. **Add the PowerShell MCP server to your configuration:**
-   ```json
-   {
-     "mcpServers": {
-       "powershell": {
-         "command": "node",
-         "args": ["C:/path/to/powershell-mcp/server.js"],
-         "env": {}
-       }
-     }
-   }
-   ```
-
-3. **Update the path** to match your installation directory.
-
-4. **Restart Claude Desktop** to load the new MCP server.
-
-## 🚀 Usage
-
-### Starting the Server
-
-Run the MCP server directly:
+### Option 1: Automated Setup (Recommended)
 ```bash
-node server.js
+# Clone the repository
+git clone https://github.com/gunjanjp/powershell-mcp.git
+cd powershell-mcp
+
+# One-command setup - installs dependencies and configures everything
+npm run fix
 ```
 
-You should see:
-```
-PowerShell MCP Server is running. Ready for Claude!
-```
+### Option 2: Manual Setup
+```bash
+# Clone and install
+git clone https://github.com/gunjanjp/powershell-mcp.git
+cd powershell-mcp
+npm install
 
-### Using with Claude
+# Configure manually
+npm run setup install
 
-Once configured, you can ask Claude to execute PowerShell commands:
-
-**Examples:**
-- "Check the current date and time"
-- "Show me the system information"
-- "List running processes"
-- "Check disk space usage"
-- "Get Windows version details"
-
-**Sample Commands Claude can execute:**
-```powershell
-Get-Date
-Get-ComputerInfo
-Get-Process | Sort-Object CPU -Descending | Select-Object -First 10
-Get-WmiObject -Class Win32_LogicalDisk | Select-Object DeviceID, Size, FreeSpace
-Get-Service | Where-Object {$_.Status -eq "Running"}
+# Restart Claude Desktop
 ```
 
-## 🛡️ Security Considerations
+### Option 3: Step-by-Step Setup
+```bash
+# Install dependencies
+npm install
 
-- The server runs with `-ExecutionPolicy Bypass` for functionality
-- Always review commands before execution
-- Consider running in a restricted environment for production use
-- Be cautious with system-modifying commands
+# Check system requirements
+npm run diagnose
 
-## 🔧 Configuration Options
+# Install server configuration
+npm run setup install
 
-You can modify the PowerShell execution options in `server.js`:
+# Validate setup
+npm run test
+```
+
+## ⚙️ **Configuration**
+
+The server automatically configures Claude Desktop by adding this configuration to `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "powershell": {
+      "command": "node",
+      "args": ["C:/path/to/powershell-mcp/src/server.js"],
+      "env": {}
+    }
+  }
+}
+```
+
+**Configuration file locations:**
+- **Windows**: `%APPDATA%\\Claude\\claude_desktop_config.json`
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Linux**: `~/.config/Claude/claude_desktop_config.json`
+
+## 📖 **Usage Examples**
+
+### Basic Commands
+Ask Claude:
+- *"Check my system information"*
+- *"Show me the top 10 processes by CPU usage"*
+- *"What's my disk space usage?"*
+- *"Execute PowerShell: Get-Date"*
+
+### Advanced Operations
+Ask Claude:
+- *"Create a PowerShell script to backup my Documents folder to D:\\Backups"*
+- *"Search for all .log files in C:\\Windows\\System32"*
+- *"Show me Windows services that are stopped"*
+- *"List files in my Downloads folder with detailed information"*
+- *"Get information about the file C:\\Windows\\System32\\notepad.exe"*
+
+### System Monitoring
+Ask Claude:
+- *"Show me processes using more than 500MB of memory"*
+- *"Check the status of services containing 'Windows'"*
+- *"Get detailed system information including uptime and hardware specs"*
+
+### Script Development
+Ask Claude:
+- *"Create a PowerShell script to monitor disk space and alert if any drive is below 10% free"*
+- *"Write a script to list all files modified in the last 24 hours"*
+- *"Generate a system health report script"*
+
+## 🛠️ **Development and Scripts**
+
+### Available npm Scripts
+```bash
+# Server operations
+npm start                 # Start the MCP server
+npm run fix              # Auto-setup everything (recommended)
+npm run setup install   # Install server configuration
+npm run setup uninstall # Remove server configuration
+
+# Testing and diagnostics
+npm test                 # Validate configuration
+npm run diagnose         # Run comprehensive diagnostics
+npm run check-health     # Check PowerShell health
+npm run setup validate  # Validate current setup
+
+# Utilities
+npm run setup help       # Show setup tool help
+```
+
+### Manual Server Start
+```bash
+# Start server directly
+node src/server.js
+
+# Start with debug output
+DEBUG=* node src/server.js
+```
+
+## 📁 **Project Structure**
+
+```
+powershell-mcp/
+├── src/                          # Source code
+│   ├── server.js                 # Main MCP server
+│   ├── tools/                    # Tool implementations
+│   │   ├── powershell-tools.js   # PowerShell execution tools
+│   │   ├── system-tools.js       # System information tools
+│   │   └── file-tools.js         # File system tools
+│   └── utils/                    # Utility modules
+│       ├── system-utils.js       # System utilities
+│       └── config-utils.js       # Configuration management
+├── scripts/                      # Setup and utility scripts
+│   ├── setup.js                  # Interactive setup tool
+│   └── auto-fix.js              # Automated setup
+├── examples/                     # Example PowerShell scripts
+│   ├── system-info.ps1          # System information script
+│   ├── process-monitor.ps1      # Process monitoring script
+│   └── backup-utility.ps1       # File backup utility
+├── test/                        # Test files and documentation
+├── .github/workflows/           # CI/CD configuration
+├── README.md                    # This documentation
+├── CHANGELOG.md                 # Version history
+├── LICENSE                      # MIT License
+└── package.json                 # npm configuration
+```
+
+## 🔧 **Advanced Configuration**
+
+### PowerShell Execution Settings
+You can modify PowerShell execution settings in `src/tools/powershell-tools.js`:
 
 ```javascript
 const ps = new PowerShell({
   executableOptions: {
     '-ExecutionPolicy': 'Bypass',    // Execution policy
     '-NoProfile': true,              // Skip PowerShell profiles
+    '-NonInteractive': true,         // Non-interactive mode
+    '-WindowStyle': 'Hidden'         // Hidden window
   }
 });
 ```
 
-## 📁 Project Structure
+### Custom Tool Development
+Add new tools by creating modules in `src/tools/` and registering them in `src/server.js`:
 
-```
-claude-powershell-mcp/
-├── server.js              # Main MCP server implementation
-├── package.json           # Node.js dependencies and scripts
-├── package-lock.json      # Dependency lock file
-├── .gitignore             # Git ignore rules
-└── README.md              # This documentation
+```javascript
+import { registerCustomTools } from './tools/custom-tools.js';
+registerCustomTools(server);
 ```
 
-## 🐛 Troubleshooting
+## 🛡️ **Security Considerations**
+
+- **Execution Policy**: Server runs with `-ExecutionPolicy Bypass` for functionality
+- **Input Validation**: All inputs are validated using Zod schemas
+- **Session Management**: PowerShell sessions are properly disposed after use
+- **Error Handling**: Comprehensive error handling prevents system damage
+- **Audit Trail**: All commands are logged with timestamps
+
+**Best Practices:**
+- Always review generated scripts before execution
+- Use working directories to limit scope
+- Test scripts in safe environments first
+- Monitor system resources during operations
+- Keep the server updated to latest version
+
+## 🐛 **Troubleshooting**
 
 ### Common Issues
 
-1. **"MCP server not found" error:**
-   - Verify the path in Claude's configuration file
-   - Ensure Node.js is installed and accessible
-   - Check that all dependencies are installed (`npm install`)
+#### "PowerShell health check failed"
+```bash
+# Check PowerShell availability
+powershell -Command "Get-Host"
+pwsh -Command "Get-Host"  # For PowerShell Core
 
-2. **PowerShell execution errors:**
-   - Verify PowerShell is available in your system PATH
-   - Check execution policy: `Get-ExecutionPolicy`
-   - Try running the server as Administrator if needed
+# Check execution policy
+Get-ExecutionPolicy
+```
 
-3. **Permission denied errors:**
-   - Run Command Prompt/PowerShell as Administrator
-   - Check Windows security settings
+#### "MCP server not found"
+```bash
+# Validate configuration
+npm run test
+
+# Reinstall configuration
+npm run setup install
+
+# Check paths
+npm run diagnose
+```
+
+#### "Node.js version error"
+```bash
+# Check Node.js version (requires 18+)
+node --version
+
+# Update Node.js if needed
+```
 
 ### Debug Mode
-
-Enable debug logging by modifying the server startup:
 ```bash
-DEBUG=* node server.js
+# Enable debug logging
+DEBUG=* npm start
+
+# Run comprehensive diagnostics
+npm run diagnose
+
+# Check specific components
+npm run check-health
 ```
 
-## 🔄 Development
-
-### Testing the Server
-
-Test individual PowerShell commands:
+### Reset Configuration
 ```bash
-# In another terminal
-curl -X POST http://localhost:3000/execute \
-  -H "Content-Type: application/json" \
-  -d '{"command": "Get-Date"}'
+# Remove current configuration
+npm run setup uninstall
+
+# Clean reinstall
+npm run fix
 ```
 
-### Making Changes
+## 📊 **Performance Optimization**
 
-1. Modify `server.js` for functionality changes
-2. Update `package.json` for dependency changes
-3. Test thoroughly before committing
-4. Follow semantic versioning for releases
+### Tips for Better Performance
+- Use specific working directories to limit scope
+- Filter processes and services when possible
+- Limit file search results with the `limit` parameter
+- Use PowerShell Core (pwsh) for better performance
+- Close Claude Desktop occasionally to free resources
 
-## 📝 API Reference
+### Resource Monitoring
+```bash
+# Check system resource usage
+npm run diagnose
 
-### Tool: `execute-powershell`
-
-**Description:** Executes a PowerShell command and returns the output.
-
-**Parameters:**
-- `command` (string): The PowerShell command or script to execute
-
-**Returns:**
-- `content`: Array with text output from the command
-- `isError`: Boolean indicating if an error occurred
-
-**Example:**
-```json
-{
-  "name": "execute-powershell",
-  "arguments": {
-    "command": "Get-Process | Select-Object -First 5"
-  }
-}
+# Monitor during heavy operations
+Get-Process node | Select-Object CPU, WorkingSet
 ```
 
-## 🤝 Contributing
+## 🤝 **Contributing**
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Make your changes and test thoroughly
-4. Commit your changes: `git commit -am 'Add new feature'`
-5. Push to the branch: `git push origin feature-name`
-6. Submit a pull request
+We welcome contributions! Please see our contributing guidelines:
 
-## 📄 License
+1. **Fork** the repository
+2. **Create** a feature branch: `git checkout -b feature-name`
+3. **Make** your changes and test thoroughly
+4. **Add** tests for new functionality
+5. **Update** documentation as needed
+6. **Commit** your changes: `git commit -am 'Add new feature'`
+7. **Push** to the branch: `git push origin feature-name`
+8. **Submit** a pull request
+
+### Development Setup
+```bash
+# Clone your fork
+git clone https://github.com/yourusername/powershell-mcp.git
+cd powershell-mcp
+
+# Install dependencies
+npm install
+
+# Run tests
+npm run test
+
+# Test your changes
+npm run diagnose
+```
+
+## 📄 **License**
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## ⚡ Quick Start Example
+## 🔗 **Related Projects**
 
-After installation and configuration:
+- [Model Context Protocol](https://modelcontextprotocol.io/) - Official MCP specification
+- [Claude Desktop](https://claude.ai/) - AI assistant with MCP support
+- [MCP SDK TypeScript](https://github.com/modelcontextprotocol/typescript-sdk) - Official TypeScript SDK
+- [PowerShell](https://github.com/PowerShell/PowerShell) - PowerShell Core repository
 
-1. **Start Claude Desktop**
-2. **Ask Claude:** "Can you check my system's current date and time?"
-3. **Claude will respond** with the current date/time using the PowerShell MCP server
+## 🎯 **Roadmap**
 
-## 🔗 Related Links
+### Version 1.2.0 (Planned)
+- [ ] PowerShell module management tools
+- [ ] Registry operations
+- [ ] Network diagnostics tools
+- [ ] Scheduled task management
+- [ ] Event log analysis tools
 
-- [Model Context Protocol Specification](https://modelcontextprotocol.io/)
-- [Claude Desktop](https://claude.ai/)
-- [PowerShell Documentation](https://docs.microsoft.com/en-us/powershell/)
-- [Node.js](https://nodejs.org/)
+### Version 1.3.0 (Future)
+- [ ] GUI application automation
+- [ ] Database query tools
+- [ ] Cloud service integration
+- [ ] Advanced security scanning
+- [ ] Performance benchmarking tools
+
+## 📞 **Support**
+
+- **Issues**: [GitHub Issues](https://github.com/gunjanjp/powershell-mcp/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/gunjanjp/powershell-mcp/discussions)
+- **Documentation**: This README and `/examples` directory
+
+## ⭐ **Acknowledgments**
+
+- [Model Context Protocol team](https://modelcontextprotocol.io/) for the excellent MCP specification
+- [Anthropic](https://anthropic.com/) for Claude and MCP support
+- [PowerShell team](https://github.com/PowerShell/PowerShell) for PowerShell Core
+- The open-source community for tools and inspiration
 
 ---
 
-**⚠️ Important:** This tool provides direct access to PowerShell commands. Use responsibly and be aware of the security implications when executing system commands.
+**⚠️ Important**: This tool provides direct access to PowerShell commands and system operations. Use responsibly and be aware of the security implications when executing system commands.
+
+Made with ❤️ for the Claude and PowerShell communities
