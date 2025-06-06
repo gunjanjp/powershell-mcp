@@ -1,18 +1,13 @@
 {
   "name": "powershell-mcp-server",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A comprehensive Model Context Protocol (MCP) server that enables Claude and other LLM applications to execute PowerShell commands, scripts, and system operations on Windows systems.",
   "main": "src/server.js",
   "type": "module",
   "scripts": {
     "start": "node src/server.js",
-    "setup": "node scripts/setup.js",
-    "fix": "node scripts/auto-fix.js",
-    "test": "npm run setup validate",
-    "diagnose": "npm run setup diagnose",
-    "install-server": "npm run setup install",
-    "uninstall-server": "npm run setup uninstall",
-    "check-health": "node -e \"import('./src/utils/system-utils.js').then(m => m.checkPowerShellHealth().then(r => console.log(JSON.stringify(r, null, 2))))\""
+    "test": "node test-server.js",
+    "diagnose": "node diagnose.bat"
   },
   "keywords": [
     "mcp",
@@ -55,7 +50,8 @@
     "examples/",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "claude_desktop_config.json"
   ],
   "preferGlobal": false,
   "os": [

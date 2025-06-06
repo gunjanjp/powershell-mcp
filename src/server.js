@@ -8,7 +8,7 @@ import { registerPowerShellTools } from './tools/powershell-tools.js';
 import { registerSystemTools } from './tools/system-tools.js';
 import { registerFileTools } from './tools/file-tools.js';
 
-// CRITICAL FIX: Use stderr for logging (stdout reserved for JSON-RPC)
+// CRITICAL: Use stderr for logging (stdout reserved for JSON-RPC)
 const log = (message) => {
   console.error(`[PowerShell MCP] ${message}`);
 };
@@ -36,4 +36,16 @@ const transport = new StdioServerTransport();
 await server.connect(transport);
 
 log('PowerShell MCP Server is running and ready for Claude Desktop!');
-log('Available tools: execute-powershell, execute-powershell-script, create-powershell-script, get-system-info, get-process-list, get-service-status, check-disk-space, list-directory, get-file-info, search-files');
+log('Available tools:');
+log('  PowerShell: execute-powershell, execute-powershell-script, create-powershell-script');
+log('  System: get-system-info, get-process-list, get-service-status, check-disk-space');  
+log('  Files: list-directory, get-file-info, search-files');
+
+// Error handling
+process.on('uncaughtException', (error) => {
+  log(`Uncaught exception: ${error.message}`);
+});
+
+process.on('unhandledRejection', (reason) => {
+  log(`Unhandled rejection: ${reason}`);
+});
