@@ -13,11 +13,11 @@ export async function getSystemInfo() {
   
   try {
     const result = await ps.invoke('Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion');
-    const lines = result.raw.split('\\n').filter(line => line.trim());
+    const lines = result.raw.split('\n').filter(line => line.trim());
     
     return {
       os: 'Windows',
-      version: lines.length > 0 ? lines[0].replace(/\\s+/g, ' ').trim() : 'Unknown'
+      version: lines.length > 0 ? lines[0].replace(/\s+/g, ' ').trim() : 'Unknown'
     };
   } catch (error) {
     return {

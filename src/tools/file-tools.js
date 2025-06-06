@@ -65,14 +65,14 @@ export function registerFileTools(server) {
           return {
             content: [{
               type: 'text',
-              text: `📁 **Directory Listing** (${detailLevel})\\n\\n📍 Path: ${path}\\n${filter ? `🔍 Filter: ${filter}` : ''}\\n\\n\`\`\`json\\n${result.output}\\n\`\`\`\\n\\n📅 Retrieved: ${result.timestamp}`
+              text: `📁 **Directory Listing** (${detailLevel})\n\n📍 Path: ${path}${filter ? `\n🔍 Filter: ${filter}` : ''}\n\n\`\`\`json\n${result.output}\n\`\`\`\n\n📅 Retrieved: ${result.timestamp}`
             }]
           };
         } else {
           return {
             content: [{
               type: 'text',
-              text: `❌ Failed to list directory:\\n\\nPath: ${path}\\nError: ${result.error}`
+              text: `❌ Failed to list directory:\n\nPath: ${path}\nError: ${result.error}`
             }],
             isError: true
           };
@@ -130,14 +130,14 @@ export function registerFileTools(server) {
           return {
             content: [{
               type: 'text',
-              text: `📄 **File Information**\\n\\n📍 Path: ${path}\\n\\n\`\`\`json\\n${result.output}\\n\`\`\`\\n\\n📅 Retrieved: ${result.timestamp}`
+              text: `📄 **File Information**\n\n📍 Path: ${path}\n\n\`\`\`json\n${result.output}\n\`\`\`\n\n📅 Retrieved: ${result.timestamp}`
             }]
           };
         } else {
           return {
             content: [{
               type: 'text',
-              text: `❌ Failed to get file information:\\n\\nPath: ${path}\\nError: ${result.error}`
+              text: `❌ Failed to get file information:\n\nPath: ${path}\nError: ${result.error}`
             }],
             isError: true
           };
@@ -178,14 +178,14 @@ export function registerFileTools(server) {
           return {
             content: [{
               type: 'text',
-              text: `🔍 **File Search Results** (Max ${limit})\\n\\n📍 Search Path: ${searchPath}\\n🔎 Pattern: ${pattern}\\n📂 Recursive: ${recursive}\\n\\n\`\`\`json\\n${result.output}\\n\`\`\`\\n\\n📅 Retrieved: ${result.timestamp}`
+              text: `🔍 **File Search Results** (Max ${limit})\n\n📍 Search Path: ${searchPath}\n🔎 Pattern: ${pattern}\n📂 Recursive: ${recursive}\n\n\`\`\`json\n${result.output}\n\`\`\`\n\n📅 Retrieved: ${result.timestamp}`
             }]
           };
         } else {
           return {
             content: [{
               type: 'text',
-              text: `❌ Failed to search files:\\n\\nPath: ${searchPath}\\nPattern: ${pattern}\\nError: ${result.error}`
+              text: `❌ Failed to search files:\n\nPath: ${searchPath}\nPattern: ${pattern}\nError: ${result.error}`
             }],
             isError: true
           };

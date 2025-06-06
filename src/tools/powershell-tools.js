@@ -62,14 +62,14 @@ export function registerPowerShellTools(server) {
           return {
             content: [{
               type: 'text',
-              text: `✅ Command executed successfully\\n\\nOutput:\\n${result.output}\\n\\nWorking Directory: ${result.workingDirectory}`
+              text: `✅ Command executed successfully\n\nOutput:\n${result.output}\n\nWorking Directory: ${result.workingDirectory}`
             }]
           };
         } else {
           return {
             content: [{
               type: 'text',
-              text: `❌ PowerShell command failed:\\n\\nError: ${result.error}\\n\\nWorking Directory: ${result.workingDirectory}`
+              text: `❌ PowerShell command failed:\n\nError: ${result.error}\n\nWorking Directory: ${result.workingDirectory}`
             }],
             isError: true
           };
@@ -108,14 +108,14 @@ export function registerPowerShellTools(server) {
           return {
             content: [{
               type: 'text',
-              text: `✅ Script executed successfully\\n\\nScript: ${scriptPath}\\nParameters: ${parameters.join(', ') || 'None'}\\n\\nOutput:\\n${result.output}\\n\\nWorking Directory: ${result.workingDirectory}`
+              text: `✅ Script executed successfully\n\nScript: ${scriptPath}\nParameters: ${parameters.join(', ') || 'None'}\n\nOutput:\n${result.output}\n\nWorking Directory: ${result.workingDirectory}`
             }]
           };
         } else {
           return {
             content: [{
               type: 'text',
-              text: `❌ PowerShell script failed:\\n\\nScript: ${scriptPath}\\nError: ${result.error}\\n\\nWorking Directory: ${result.workingDirectory}`
+              text: `❌ PowerShell script failed:\n\nScript: ${scriptPath}\nError: ${result.error}\n\nWorking Directory: ${result.workingDirectory}`
             }],
             isError: true
           };
@@ -160,14 +160,14 @@ ${content}
           return {
             content: [{
               type: 'text',
-              text: `✅ PowerShell script created successfully\\n\\nLocation: ${scriptPath}\\nExecutable: ${executable}\\n\\nResult: ${result.output}`
+              text: `✅ PowerShell script created successfully\n\nLocation: ${scriptPath}\nExecutable: ${executable}\n\nResult: ${result.output}`
             }]
           };
         } else {
           return {
             content: [{
               type: 'text',
-              text: `❌ Failed to create PowerShell script:\\n\\nError: ${result.error}`
+              text: `❌ Failed to create PowerShell script:\n\nError: ${result.error}`
             }],
             isError: true
           };

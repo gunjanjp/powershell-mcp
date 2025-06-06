@@ -72,14 +72,14 @@ export function registerSystemTools(server) {
           return {
             content: [{
               type: 'text',
-              text: `🖥️ **System Information**\\n\\n\`\`\`json\\n${result.output}\\n\`\`\`\\n\\n📅 Retrieved: ${result.timestamp}`
+              text: `🖥️ **System Information**\n\n\`\`\`json\n${result.output}\n\`\`\`\n\n📅 Retrieved: ${result.timestamp}`
             }]
           };
         } else {
           return {
             content: [{
               type: 'text',
-              text: `❌ Failed to get system information:\\n\\n${result.error}`
+              text: `❌ Failed to get system information:\n\n${result.error}`
             }],
             isError: true
           };
@@ -120,14 +120,14 @@ export function registerSystemTools(server) {
           return {
             content: [{
               type: 'text',
-              text: `📊 **Running Processes** (Top ${limit}, sorted by ${sortBy})\\n${processName ? `\\n🔍 Filter: "${processName}"` : ''}\\n\\n\`\`\`json\\n${result.output}\\n\`\`\`\\n\\n📅 Retrieved: ${result.timestamp}`
+              text: `📊 **Running Processes** (Top ${limit}, sorted by ${sortBy})${processName ? `\n\n🔍 Filter: "${processName}"` : ''}\n\n\`\`\`json\n${result.output}\n\`\`\`\n\n📅 Retrieved: ${result.timestamp}`
             }]
           };
         } else {
           return {
             content: [{
               type: 'text',
-              text: `❌ Failed to get process list:\\n\\n${result.error}`
+              text: `❌ Failed to get process list:\n\n${result.error}`
             }],
             isError: true
           };
@@ -171,14 +171,14 @@ export function registerSystemTools(server) {
           return {
             content: [{
               type: 'text',
-              text: `🔧 **Windows Services**\\n${serviceName ? `\\n🔍 Filter: "${serviceName}"` : ''}\\n📊 Status: ${status}\\n\\n\`\`\`json\\n${result.output}\\n\`\`\`\\n\\n📅 Retrieved: ${result.timestamp}`
+              text: `🔧 **Windows Services**${serviceName ? `\n\n🔍 Filter: "${serviceName}"` : ''}\n📊 Status: ${status}\n\n\`\`\`json\n${result.output}\n\`\`\`\n\n📅 Retrieved: ${result.timestamp}`
             }]
           };
         } else {
           return {
             content: [{
               type: 'text',
-              text: `❌ Failed to get service status:\\n\\n${result.error}`
+              text: `❌ Failed to get service status:\n\n${result.error}`
             }],
             isError: true
           };
@@ -217,14 +217,14 @@ export function registerSystemTools(server) {
           return {
             content: [{
               type: 'text',
-              text: `💾 **Disk Space Usage**\\n${drive ? `\\n🔍 Drive: ${drive}` : '\\n📊 All Drives'}\\n\\n\`\`\`json\\n${result.output}\\n\`\`\`\\n\\n📅 Retrieved: ${result.timestamp}`
+              text: `💾 **Disk Space Usage**${drive ? `\n\n🔍 Drive: ${drive}` : '\n📊 All Drives'}\n\n\`\`\`json\n${result.output}\n\`\`\`\n\n📅 Retrieved: ${result.timestamp}`
             }]
           };
         } else {
           return {
             content: [{
               type: 'text',
-              text: `❌ Failed to check disk space:\\n\\n${result.error}`
+              text: `❌ Failed to check disk space:\n\n${result.error}`
             }],
             isError: true
           };
