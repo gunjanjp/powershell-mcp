@@ -1,0 +1,35 @@
+{
+  "name": "powershell-mcp",
+  "version": "1.0.0",
+  "description": "A Model Context Protocol (MCP) server that enables Claude and other LLM applications to execute PowerShell commands and scripts on Windows systems.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "powershell",
+    "claude",
+    "ai",
+    "llm",
+    "windows",
+    "automation"
+  ],
+  "author": "Gunjan",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gunjanjp/powershell-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gunjanjp/powershell-mcp/issues"
+  },
+  "homepage": "https://github.com/gunjanjp/powershell-mcp#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "node-powershell": "^5.0.1"
+  }
+}
