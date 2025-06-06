@@ -37,15 +37,25 @@ A comprehensive Model Context Protocol (MCP) server that enables Claude and othe
 
 ## 🚀 **Quick Setup**
 
-### Option 1: Automated Setup (Recommended)
+### Option 1: Safe Automated Setup (Recommended)
 ```bash
-# Clone and setup everything automatically
+# Clone and setup with configuration management
 git clone https://github.com/gunjanjp/powershell-mcp.git
 cd powershell-mcp
-setup.bat
+complete-setup.bat
 ```
 
-### Option 2: Manual Setup
+### Option 2: Configuration Recovery (If you had existing settings)
+```bash
+# If previous setup overwrote your existing configuration
+node recovery.js status      # Check current state
+node recovery.js scan        # Find backup configurations
+node recovery.js restore 1   # Restore from backup
+# OR
+node recovery.js merge 1     # Merge backup with current config
+```
+
+### Option 3: Manual Setup
 ```bash
 # Clone the repository
 git clone https://github.com/gunjanjp/powershell-mcp.git
@@ -54,8 +64,8 @@ cd powershell-mcp
 # Install dependencies
 npm install
 
-# Copy configuration to Claude Desktop
-copy claude_desktop_config.json "%APPDATA%\Claude\claude_desktop_config.json"
+# Safely add to existing configuration
+node recovery.js add-powershell
 
 # Restart Claude Desktop
 ```
@@ -73,6 +83,7 @@ Ask Claude:
 
 ## 🔧 **Commands**
 
+### Server Commands
 ```bash
 # Start the server
 npm start
@@ -85,6 +96,36 @@ node diagnose.bat
 
 # Start server directly  
 node src/server.js
+```
+
+### Configuration Management
+```bash
+# Check configuration status
+node recovery.js status
+
+# Find backup configurations
+node recovery.js scan
+
+# Safely add PowerShell server
+node recovery.js add-powershell
+
+# Restore from backup
+node recovery.js restore <number>
+
+# Merge configurations
+node recovery.js merge <number>
+
+# Show backup contents
+node recovery.js show <number>
+```
+
+### Quick Setup Commands
+```bash
+# Complete setup with safety checks
+complete-setup.bat
+
+# Test server only
+run-test.bat
 ```
 
 ## 📁 **Project Structure**
@@ -172,8 +213,16 @@ Get-ExecutionPolicy
 node diagnose.bat
 ```
 
-## 🔄 **Recent Fixes (v1.1.1)**
+## 🔄 **Recent Updates (v1.1.2)**
 
+### Configuration Management Improvements
+- ✅ **Safe Configuration Management** - No more overwriting existing configs
+- ✅ **Automatic Backups** - Creates backups before any configuration changes
+- ✅ **Configuration Recovery** - Tools to find and restore previous configurations
+- ✅ **Merge Capability** - Intelligent merging of multiple MCP server configs
+- ✅ **Interactive Recovery** - Step-by-step configuration recovery process
+
+### Previous Fixes (v1.1.1)
 - ✅ **Fixed Claude Desktop JSON parsing error** - Changed console.log to console.error (stderr)
 - ✅ **Cleaned up project structure** - Removed redundant server files
 - ✅ **Simplified setup** - One script setup process
