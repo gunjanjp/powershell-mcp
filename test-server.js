@@ -70,7 +70,7 @@ try {
     }
   );
   
-  console.log('✅ Server creation successful');
+  console.log('✅ Server creation and tool registration successful');
 } catch (error) {
   console.log(`❌ Server creation failed: ${error.message}`);
   process.exit(1);
@@ -94,8 +94,28 @@ try {
   process.exit(1);
 }
 
+// Test 6: PowerShell JSON output
+console.log('\nTest 6: PowerShell JSON Output Test');
+try {
+  const ps = new PowerShell({
+    executableOptions: {
+      '-ExecutionPolicy': 'Bypass',
+      '-NoProfile': true,
+    }
+  });
+  
+  const result = await ps.invoke('Get-Date | ConvertTo-Json');
+  console.log(`✅ PowerShell JSON output works`);
+  console.log(`   Sample output: ${result.raw.substring(0, 100)}...`);
+  await ps.dispose();
+} catch (error) {
+  console.log(`❌ PowerShell JSON test failed: ${error.message}`);
+  process.exit(1);
+}
+
 console.log('\n🎉 All tests passed! The PowerShell MCP Server should work correctly.');
 console.log('\n💡 Next steps:');
-console.log('   1. Test the server: node src/server-simple.js');
-console.log('   2. Configure Claude Desktop to use the server');
-console.log('   3. Test with Claude Desktop application');
+console.log('   1. Test the simplified server: node src/server-simple.js');
+console.log('   2. Test the full server: node src/server.js');
+console.log('   3. Configure Claude Desktop to use the server');
+console.log('   4. Test with Claude Desktop application');
