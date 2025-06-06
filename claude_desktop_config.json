@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "powershell": {
+      "command": "node",
+      "args": ["D:/claude/claude-powershell-mcp/src/server-standalone.js"],
+      "env": {}
+    }
+  }
+}

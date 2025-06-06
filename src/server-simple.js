@@ -3,12 +3,17 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod';
 import { PowerShell } from 'node-powershell';
 
-console.log('🚀 Starting PowerShell MCP Server...');
+// CRITICAL FIX: Use stderr for all logging (stdout is reserved for JSON-RPC)
+const log = (message) => {
+  console.error(`[PowerShell MCP] ${message}`);
+};
+
+log('Starting simplified PowerShell MCP Server...');
 
 // Create an MCP server instance
 const server = new McpServer({
   name: 'powershell-mcp-server',
-  version: '1.1.0',
+  version: '1.1.1',
 });
 
 // Basic PowerShell execution tool
@@ -19,7 +24,7 @@ server.tool(
     command: z.string().describe('The PowerShell command to execute')
   },
   async ({ command }) => {
-    console.log(`📝 Executing PowerShell command: ${command}`);
+    log(`Executing: ${command}`);
     
     const ps = new PowerShell({
       executableOptions: {
@@ -30,7 +35,7 @@ server.tool(
     
     try {
       const result = await ps.invoke(command);
-      console.log('✅ Command executed successfully');
+      log('Command executed successfully');
       
       return {
         content: [{
@@ -39,7 +44,7 @@ server.tool(
         }]
       };
     } catch (error) {
-      console.log(`❌ Command failed: ${error.message}`);
+      log(`Command failed: ${error.message}`);
       
       return {
         content: [{
@@ -60,7 +65,7 @@ server.tool(
   'Get basic Windows system information',
   {},
   async () => {
-    console.log('📊 Getting system information...');
+    log('Getting system information');
     
     const ps = new PowerShell({
       executableOptions: {
@@ -71,7 +76,7 @@ server.tool(
     
     try {
       const result = await ps.invoke('Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion, TotalPhysicalMemory | ConvertTo-Json');
-      console.log('✅ System info retrieved successfully');
+      log('System info retrieved');
       
       return {
         content: [{
@@ -80,7 +85,7 @@ server.tool(
         }]
       };
     } catch (error) {
-      console.log(`❌ System info failed: ${error.message}`);
+      log(`System info failed: ${error.message}`);
       
       return {
         content: [{
@@ -95,11 +100,10 @@ server.tool(
   }
 );
 
+log('Tools registered');
+
 // Set up transport and start listening
 const transport = new StdioServerTransport();
 await server.connect(transport);
 
-console.log('🎉 PowerShell MCP Server is running and ready for Claude!');
-console.log('📝 Available tools:');
-console.log('   - execute-powershell: Execute PowerShell commands');
-console.log('   - get-system-info: Get Windows system information');
+log('Server connected and ready for Claude Desktop!');
